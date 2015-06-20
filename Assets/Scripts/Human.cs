@@ -12,16 +12,16 @@ public class Human : MonoBehaviour
 	public float			rotationSpeed;
 	public Sprite			headSprite;
 	public Sprite			bodySprite;
-	public float			throwForce;
+	public float			throwingForce;
 
 	protected Weapon		_weapon;
 
-	void		Update()
+	protected void		Update()
 	{
 		HandleInputs();
 	}
 
-	void		FixedUpdate()
+	protected void		FixedUpdate()
 	{
 		Move();
 		Rotate();
@@ -30,19 +30,9 @@ public class Human : MonoBehaviour
 
 	protected virtual void		HandleInputs()
 	{
-		if (Input.GetButtonDown("Fire1"))
-			Fire();
-
-		if (Input.GetButtonDown("Fire2"))
-		{
-			if (_weapon != null)
-				DropWeapon();
-			else
-				TryToPickWeapon();
-		}
 	}
 
-	void		Move()
+	protected void		Move()
 	{
 		Quaternion	rotation;
 
@@ -52,7 +42,7 @@ public class Human : MonoBehaviour
 		transform.rotation = rotation;
 	}
 
-	void		UpdateSprites()
+	protected void		UpdateSprites()
 	{
 		SpriteRenderer[]	sprites;
 
@@ -68,7 +58,7 @@ public class Human : MonoBehaviour
 		sprites[2].sprite = bodySprite;
 	}
 
-	void		Fire()
+	protected void		Fire()
 	{
 		if (_weapon == null)
 			return ;
@@ -76,7 +66,7 @@ public class Human : MonoBehaviour
 		_weapon.Fire();
 	}
 
-	void		Rotate()
+	protected void		Rotate()
 	{
 		Quaternion	newRotation;
 
@@ -92,7 +82,7 @@ public class Human : MonoBehaviour
 			transform.rotation = newRotation;
 	}
 
-	void		TryToPickWeapon()
+	protected void		TryToPickWeapon()
 	{
 		RaycastHit2D[]	hits;
 
@@ -108,13 +98,13 @@ public class Human : MonoBehaviour
 		}
 	}
 
-	void		PickWeapon(GameObject target)
+	protected void		PickWeapon(GameObject target)
 	{
 		_weapon = target.GetComponent<Weapon>();
 		target.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
-	void		DropWeapon()
+	protected void		DropWeapon()
 	{
 		Rigidbody2D	rigidbody;
 
@@ -123,7 +113,7 @@ public class Human : MonoBehaviour
 		rigidbody = _weapon.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = 0;
-		rigidbody.AddForce(Vector3.Normalize(aimDirection) * throwForce, ForceMode2D.Impulse);
+		rigidbody.AddForce(Vector3.Normalize(aimDirection) * throwingForce, ForceMode2D.Impulse);
 		_weapon = null;
 	}
 }

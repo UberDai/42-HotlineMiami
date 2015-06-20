@@ -14,5 +14,16 @@ public class Hero : Human
 		moveDirection = Vector3.Normalize(moveDirection);
 
 		aimDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+		if (Input.GetButtonDown("Fire1"))
+			Fire();
+
+		if (Input.GetButtonDown("Fire2"))
+		{
+			if (_weapon != null)
+				DropWeapon();
+			else
+				TryToPickWeapon();
+		}
 	}
 }

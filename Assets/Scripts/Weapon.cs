@@ -12,11 +12,18 @@ public class Weapon : MonoBehaviour
 	{
 		Vector2		position;
 		Quaternion	rotation;
-		Object		prefab;
+		GameObject	go;
+		Bullet		bullet;
+
+		if (ammo == 0)
+			return ;
 
 		position = GameManager.hero.transform.position;
 		rotation = GameManager.hero.transform.rotation;
-		Instantiate(bulletPrefab, position, rotation);
+		go = (GameObject) Instantiate(bulletPrefab, position, rotation);
+
+		bullet = go.GetComponent<Bullet>();
+		bullet.direction = Vector3.Normalize(GameManager.hero.aimDirection);
 
 		ammo--;
 	}

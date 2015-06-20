@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
+	[HideInInspector]
 	public Vector2	direction;
 	public float	speed;
 
