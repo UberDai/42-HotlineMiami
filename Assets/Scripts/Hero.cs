@@ -13,16 +13,8 @@ public class Hero : Human
 	{
 		moveDirection = Vector2.zero;
 
-		if (Input.GetButton("Right"))
-			moveDirection.x += 1f;
-		if (Input.GetButton("Left"))
-			moveDirection.x -= 1f;
-
-		if (Input.GetButton("Up"))
-			moveDirection.y += 1f;
-		if (Input.GetButton("Down"))
-			moveDirection.y -= 1f;
-
+		moveDirection.x = Input.GetAxis("Horizontal");
+		moveDirection.y = Input.GetAxis("Vertical");
 		moveDirection = Vector3.Normalize(moveDirection);
 
 		aimDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);

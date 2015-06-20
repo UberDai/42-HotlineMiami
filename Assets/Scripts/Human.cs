@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Human : MonoBehaviour
 {
-	[HideInInspector]
 	public Vector2		moveDirection;
 	[HideInInspector]
 	public Vector2		aimDirection;
