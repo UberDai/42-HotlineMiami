@@ -3,14 +3,10 @@ using System.Collections;
 
 public class Hero : Human
 {
-	void	FixedUpdate()
+	protected override void	HandleInputs()
 	{
-		base.FixedUpdate();
-		HandleInputs();
-	}
+		base.HandleInputs();
 
-	void	HandleInputs()
-	{
 		moveDirection = Vector2.zero;
 
 		moveDirection.x = Input.GetAxis("Horizontal");
