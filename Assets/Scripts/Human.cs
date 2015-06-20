@@ -14,18 +14,15 @@ public class Human : MonoBehaviour
 	public Sprite			bodySprite;
 	public float			throwForce;
 
-	protected GameObject	_weapon;
-	protected GameObject	_availableWeapon;
+	protected Weapon		_weapon;
 
-
-	void		Awake()
+	void		Update()
 	{
-		_availableWeapon = null;
+		HandleInputs();
 	}
 
 	void		FixedUpdate()
 	{
-		HandleInputs();
 		Move();
 		Rotate();
 		UpdateSprites();
@@ -33,9 +30,12 @@ public class Human : MonoBehaviour
 
 	protected virtual void		HandleInputs()
 	{
+		if (Input.GetButtonDown("Fire1"))
+			Fire();
+
 		if (Input.GetButtonDown("Fire2"))
 		{
-			if (_weapon)
+			if (_weapon != null)
 				DropWeapon();
 			else
 				TryToPickWeapon();
@@ -61,11 +61,19 @@ public class Human : MonoBehaviour
 		sprites[0].sprite = headSprite;
 
 		if (_weapon != null)
-			sprites[1].sprite = _weapon.GetComponent<Weapon>().attachedSprite;
+			sprites[1].sprite = _weapon.attachedSprite;
 		else
 			sprites[1].sprite = null;
 
 		sprites[2].sprite = bodySprite;
+	}
+
+	void		Fire()
+	{
+		if (_weapon == null)
+			return ;
+
+		_weapon.Fire();
 	}
 
 	void		Rotate()
@@ -102,7 +110,7 @@ public class Human : MonoBehaviour
 
 	void		PickWeapon(GameObject target)
 	{
-		_weapon = target;
+		_weapon = target.GetComponent<Weapon>();
 		target.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
@@ -117,16 +125,5 @@ public class Human : MonoBehaviour
 		rigidbody.angularVelocity = 0;
 		rigidbody.AddForce(Vector3.Normalize(aimDirection) * throwForce, ForceMode2D.Impulse);
 		_weapon = null;
-	}
-
-	void		OnTriggerEnter2D(Collider2D collider)
-	{
-		if (collider.gameObject.tag == "Weapon")
-			_availableWeapon = collider.gameObject;
-	}
-
-	void		OnTriggerExit2D(Collider2D collider)
-	{
-		_availableWeapon = null;
 	}
 }
