@@ -3,16 +3,16 @@ using System.Collections;
 
 public class Human : MonoBehaviour
 {
-	public int			maxLife;
-	public float		speed;
 	[HideInInspector]
 	public Vector2		moveDirection;
 	[HideInInspector]
 	public Vector2		aimDirection;
+	public int			maxLife;
+	public float		speed;
 	public float		rotationSpeed;
 	public Sprite		headSprite;
 	public Sprite		bodySprite;
-	public Sprite		weaponSprite;
+	public GameObject	weapon;
 
 	public void	FixedUpdate()
 	{
@@ -38,7 +38,7 @@ public class Human : MonoBehaviour
 		sprites = GetComponentsInChildren<SpriteRenderer>();
 
 		sprites[0].sprite = headSprite;
-		sprites[1].sprite = weaponSprite;
+		sprites[1].sprite = weapon.GetComponent<Weapon>().attachedSprite;
 		sprites[2].sprite = bodySprite;
 	}
 
