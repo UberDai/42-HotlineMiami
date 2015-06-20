@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Hero : Human
 {
-	void	Update()
+	void	FixedUpdate()
 	{
-		base.Update();
+		base.FixedUpdate();
 		HandleInputs();
 	}
 
@@ -24,5 +24,7 @@ public class Hero : Human
 			moveDirection.y -= 1f;
 
 		moveDirection = Vector3.Normalize(moveDirection);
+
+		aimDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 	}
 }
