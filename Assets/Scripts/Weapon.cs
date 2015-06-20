@@ -20,10 +20,12 @@ public class Weapon : MonoBehaviour
 
 		position = GameManager.hero.transform.position;
 		rotation = GameManager.hero.transform.rotation;
+		rotation *= Quaternion.Euler(0, 0, -90);
+
 		go = (GameObject) Instantiate(bulletPrefab, position, rotation);
 
 		bullet = go.GetComponent<Bullet>();
-		bullet.direction = Vector3.Normalize(GameManager.hero.aimDirection);
+		bullet.direction = new Vector2(1, 0);
 
 		ammo--;
 	}
