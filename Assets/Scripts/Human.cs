@@ -201,9 +201,7 @@ public class Human : MonoBehaviour
 			bullet = collision.gameObject.GetComponent<Bullet>();
 
 			if (bullet.shooter != this)
-			{
 				Die(bullet);
-			}
 		}
 	}
 }

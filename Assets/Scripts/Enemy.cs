@@ -100,7 +100,7 @@ public class Enemy : Human
 		LayerMask		layerMask;
 		GameObject		go;
 
-		layerMask = LayerMask.GetMask("Character", "Wall");
+		layerMask = LayerMask.GetMask("Character", "Wall", "Hero");
 		heroPosition = GameManager.hero.transform.position;
 		hits = Physics2D.RaycastAll(transform.position, heroPosition - transform.position, Mathf.Infinity, layerMask.value);
 
@@ -120,6 +120,6 @@ public class Enemy : Human
 	protected override void	Die(Bullet bullet)
 	{
 		base.Die(bullet);
-		Destroy(gameObject, 2f);
+		Destroy(gameObject, 1f);
 	}
 }

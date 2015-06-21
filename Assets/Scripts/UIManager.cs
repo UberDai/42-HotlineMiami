@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
 	{
 		if (GameManager.hero.weapon == null)
 			ammoValue.text = "None";
+		else if (GameManager.hero.weapon.name == "Lel(Clone)")
+			ammoValue.text = "OMGGG!!1";
 		else if (GameManager.hero.weapon.ammo == -1)
 			ammoValue.text = "Too Much";
 		else
