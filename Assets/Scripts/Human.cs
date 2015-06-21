@@ -53,7 +53,7 @@ public class Human : MonoBehaviour
 	{
 		Quaternion	rotation;
 
-		if (movingDirection == Vector2.zero)
+		if (!movingToTarget && movingDirection == Vector2.zero)
 		{
 			_legsAnimator.SetBool("Walking", false);
 			return ;
@@ -119,7 +119,7 @@ public class Human : MonoBehaviour
 	    newRotation = newRotation * new Quaternion(0, 0, -1, 0);
 
 	    if (rotationSpeed > 0)
-			transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * speed);
+			transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * rotationSpeed);
 	    else
 			transform.rotation = newRotation;
 	}

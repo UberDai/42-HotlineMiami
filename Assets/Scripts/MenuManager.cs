@@ -5,23 +5,21 @@ using System.Collections.Generic;
 
 public class MenuManager : MonoBehaviour
 {
-	void HidePauseMenu()
-	{
-		transform.parent.gameObject.SetActive(false);
-	}
-
 	public void OnPlayClick()
 	{
-		Application.LoadLevel("Level01");
+		print("play");
+		Application.LoadLevel(Application.loadedLevel);
 	}
 
 	public void OnQuitClick()
 	{
+		print("quit");
 		Application.Quit();
 	}
 
 	public void OnResumeClick()
 	{
-		gameObject.SetActive(false);
+		print("resume");
+		GameManager.Resume();
 	}
 }

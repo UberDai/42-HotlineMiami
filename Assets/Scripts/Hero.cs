@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Hero : Human
 {
+	public delegate			void ShotEvent();
+	public event ShotEvent	OnFire;
+
 	protected override void	HandleInputs()
 	{
 		base.HandleInputs();
@@ -16,7 +19,10 @@ public class Hero : Human
 		SetAimingTarget(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
 		if (Input.GetButton("Fire1"))
+		{
+			OnFire();
 			Fire();
+		}
 
 		if (Input.GetButtonDown("Fire2"))
 		{
