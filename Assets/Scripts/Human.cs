@@ -28,7 +28,6 @@ public class Human : MonoBehaviour
 		movingToTarget = false;
 		_rigidbody = GetComponent<Rigidbody2D>();
 		_legsAnimator = GetComponentsInChildren<SpriteRenderer>()[3].GetComponent<Animator>();
-		print(_legsAnimator);
 	}
 
 	protected void		Update()
@@ -146,6 +145,7 @@ public class Human : MonoBehaviour
 		_weapon = target.GetComponent<Weapon>();
 		_weapon.GetComponent<SpriteRenderer>().enabled = false;
 		_weapon.GetComponent<BoxCollider2D>().enabled = false;
+		_weapon.holder = this;
 	}
 
 	protected void		DropWeapon()
@@ -156,6 +156,7 @@ public class Human : MonoBehaviour
 		_weapon.transform.rotation = Quaternion.identity;
 		_weapon.GetComponent<SpriteRenderer>().enabled = true;
 		_weapon.GetComponent<BoxCollider2D>().enabled = true;
+		_weapon.holder = null;
 		rigidbody = _weapon.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = 0;

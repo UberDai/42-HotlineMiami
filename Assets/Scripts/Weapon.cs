@@ -7,7 +7,10 @@ public class Weapon : MonoBehaviour
 	public Sprite	bulletSprite;
 	public float	bulletSpeed;
 	public int		ammo;
+	public float	range;
 	public Object	bulletPrefab;
+
+	public Human	holder;
 
 	public void	Fire()
 	{
@@ -19,15 +22,16 @@ public class Weapon : MonoBehaviour
 		if (ammo <= 0)
 			return ;
 
-		position = GameManager.hero.transform.position;
-		rotation = GameManager.hero.transform.rotation;
+		position = holder.transform.position;
+		rotation = holder.transform.rotation;
 		rotation *= Quaternion.Euler(0, 0, -90);
 
 		go = (GameObject) Instantiate(bulletPrefab, position, rotation);
 
 		bullet = go.GetComponent<Bullet>();
-		bullet.direction = new Vector2(1, 0);
+		bullet.direction = holder.aimingDirection * -1;
 		bullet.speed = bulletSpeed;
+		bullet.range = range;
 
 		bullet.GetComponent<SpriteRenderer>().sprite = bulletSprite;
 

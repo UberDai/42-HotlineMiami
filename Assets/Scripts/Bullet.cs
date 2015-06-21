@@ -4,9 +4,19 @@ using System.Collections;
 public class Bullet : MonoBehaviour
 {
 	[HideInInspector]
-	public Vector2	direction;
+	public Vector2			direction;
 	[HideInInspector]
-	public float	speed;
+	public float			speed;
+	[HideInInspector]
+	public float			range;
+	protected Rigidbody2D	_rigidbody;
+	protected Vector2		_basePosition;
+
+	void	Awake()
+	{
+		_rigidbody = GetComponent<Rigidbody2D>();
+		_basePosition = _rigidbody.position;
+	}
 
 	void	FixedUpdate()
 	{
@@ -15,12 +25,20 @@ public class Bullet : MonoBehaviour
 
 	void	Move()
 	{
-		transform.Translate(direction * speed * Time.deltaTime);
+		_rigidbody.position = _rigidbody.position + direction * speed * Time.deltaTime;
+
+		if (range != -1 && Vector2.Distance(_basePosition, _rigidbody.position) > range)
+			Destroy(gameObject);
 	}
 
 	void	OnCollisionEnter2D(Collision2D collision)
 	{
 		if (collision.gameObject != GameManager.hero.gameObject)
+		{
+			if (collision.gameObject.tag == "Door")
+				collision.gameObject.GetComponent<Rigidbody2D>().AddForce(direction * 2f, ForceMode2D.Impulse);
+
 			Destroy(gameObject);
+		}
 	}
 }
