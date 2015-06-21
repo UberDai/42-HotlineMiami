@@ -18,12 +18,17 @@ public class Human : MonoBehaviour
 	public Sprite			headSprite;
 	public Sprite			bodySprite;
 	public float			throwingForce;
+	protected Rigidbody2D	_rigidbody;
+	protected Animator		_legsAnimator;
 
 	protected Weapon		_weapon;
 
 	void				Awake()
 	{
 		movingToTarget = false;
+		_rigidbody = GetComponent<Rigidbody2D>();
+		_legsAnimator = GetComponentsInChildren<SpriteRenderer>()[3].GetComponent<Animator>();
+		print(_legsAnimator);
 	}
 
 	protected void		Update()
@@ -31,8 +36,11 @@ public class Human : MonoBehaviour
 		HandleInputs();
 	}
 
-	protected void		FixedUpdate()
+	protected virtual void		FixedUpdate()
 	{
+		_rigidbody.velocity = Vector3.zero;
+		_rigidbody.angularVelocity = 0;
+
 		Move();
 		Rotate();
 		UpdateSprites();
@@ -46,17 +54,26 @@ public class Human : MonoBehaviour
 	{
 		Quaternion	rotation;
 
+		if (movingDirection == Vector2.zero)
+		{
+			_legsAnimator.SetBool("Walking", false);
+			return ;
+		}
+
 		rotation = transform.rotation;
 		transform.rotation = Quaternion.identity;
 
+		_legsAnimator.SetBool("Walking", true);
+
 		if (movingToTarget)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, _movingTarget, speed * Time.deltaTime);
+			_rigidbody.position = Vector3.MoveTowards(_rigidbody.position, _movingTarget, speed * Time.deltaTime);
+
 			if ((Vector2) transform.position == _movingTarget)
 				movingToTarget = false;
 		}
 		else
-			transform.Translate(movingDirection * speed * Time.deltaTime);
+			_rigidbody.MovePosition(_rigidbody.position + movingDirection * speed * Time.deltaTime);
 
 		transform.rotation = rotation;
 	}
@@ -127,22 +144,22 @@ public class Human : MonoBehaviour
 	protected void		PickWeapon(GameObject target)
 	{
 		_weapon = target.GetComponent<Weapon>();
-		target.GetComponent<SpriteRenderer>().enabled = false;
+		_weapon.GetComponent<SpriteRenderer>().enabled = false;
+		_weapon.GetComponent<BoxCollider2D>().enabled = false;
 	}
 
 	protected void		DropWeapon()
 	{
 		Rigidbody2D	rigidbody;
-		Vector2		forceDirection;
 
 		_weapon.transform.position = transform.position;
 		_weapon.transform.rotation = Quaternion.identity;
 		_weapon.GetComponent<SpriteRenderer>().enabled = true;
+		_weapon.GetComponent<BoxCollider2D>().enabled = true;
 		rigidbody = _weapon.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = 0;
-		forceDirection = aimingDirection + movingDirection * speed * -0.2f;
-		rigidbody.AddForce(forceDirection * throwingForce * -1, ForceMode2D.Impulse);
+		rigidbody.AddForce(aimingDirection * throwingForce * -1, ForceMode2D.Impulse);
 		_weapon = null;
 	}
 

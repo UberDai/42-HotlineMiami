@@ -17,4 +17,10 @@ public class Bullet : MonoBehaviour
 	{
 		transform.Translate(direction * speed * Time.deltaTime);
 	}
+
+	void	OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject != GameManager.hero.gameObject)
+			Destroy(gameObject);
+	}
 }
