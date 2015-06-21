@@ -5,7 +5,8 @@ public class Weapon : MonoBehaviour
 {
 	public Sprite	attachedSprite;
 	public Sprite	bulletSprite;
-	public uint		ammo;
+	public float	bulletSpeed;
+	public int		ammo;
 	public Object	bulletPrefab;
 
 	public void	Fire()
@@ -15,7 +16,7 @@ public class Weapon : MonoBehaviour
 		GameObject	go;
 		Bullet		bullet;
 
-		if (ammo == 0)
+		if (ammo <= 0)
 			return ;
 
 		position = GameManager.hero.transform.position;
@@ -26,7 +27,11 @@ public class Weapon : MonoBehaviour
 
 		bullet = go.GetComponent<Bullet>();
 		bullet.direction = new Vector2(1, 0);
+		bullet.speed = bulletSpeed;
 
-		ammo--;
+		bullet.GetComponent<SpriteRenderer>().sprite = bulletSprite;
+
+		if (ammo > 0)
+			ammo--;
 	}
 }

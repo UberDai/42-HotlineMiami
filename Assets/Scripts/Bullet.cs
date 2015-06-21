@@ -5,6 +5,7 @@ public class Bullet : MonoBehaviour
 {
 	[HideInInspector]
 	public Vector2	direction;
+	[HideInInspector]
 	public float	speed;
 
 	void	FixedUpdate()
@@ -14,6 +15,6 @@ public class Bullet : MonoBehaviour
 
 	void	Move()
 	{
-		transform.Translate(direction * speed / (1 / Time.deltaTime));
+		transform.Translate(direction * speed * Time.deltaTime);
 	}
 }

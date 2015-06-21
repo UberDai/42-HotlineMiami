@@ -3,10 +3,15 @@ using System.Collections;
 
 public class Human : MonoBehaviour
 {
+	protected Vector2		_movingTarget;
 	[HideInInspector]
-	public Vector2			moveDirection;
+	public bool				movingToTarget;
 	[HideInInspector]
-	public Vector2			aimDirection;
+	public Vector2			movingDirection;
+	[HideInInspector]
+	public Vector2			aimingTarget;
+	[HideInInspector]
+	public Vector2			aimingDirection;
 	public int				maxLife;
 	public float			speed;
 	public float			rotationSpeed;
@@ -15,6 +20,11 @@ public class Human : MonoBehaviour
 	public float			throwingForce;
 
 	protected Weapon		_weapon;
+
+	void				Awake()
+	{
+		movingToTarget = false;
+	}
 
 	protected void		Update()
 	{
@@ -38,8 +48,24 @@ public class Human : MonoBehaviour
 
 		rotation = transform.rotation;
 		transform.rotation = Quaternion.identity;
-		transform.Translate(moveDirection * speed / (1 / Time.deltaTime));
+
+		if (movingToTarget)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, _movingTarget, speed * Time.deltaTime);
+			if ((Vector2) transform.position == _movingTarget)
+				movingToTarget = false;
+		}
+		else
+			transform.Translate(movingDirection * speed * Time.deltaTime);
+
 		transform.rotation = rotation;
+	}
+
+	protected void		SetAimingTarget(Vector2 target)
+	{
+		aimingTarget = target;
+		aimingDirection = (Vector2) transform.position - aimingTarget;
+		aimingDirection.Normalize();
 	}
 
 	protected void		UpdateSprites()
@@ -70,7 +96,7 @@ public class Human : MonoBehaviour
 	{
 		Quaternion	newRotation;
 
-		newRotation = Quaternion.LookRotation(transform.position - (Vector3) aimDirection, Vector3.forward);
+		newRotation = Quaternion.LookRotation(transform.position - (Vector3) aimingTarget, Vector3.forward);
 	    newRotation.x = 0;
 	    newRotation.y = 0;
 
@@ -107,13 +133,22 @@ public class Human : MonoBehaviour
 	protected void		DropWeapon()
 	{
 		Rigidbody2D	rigidbody;
+		Vector2		forceDirection;
 
 		_weapon.transform.position = transform.position;
+		_weapon.transform.rotation = Quaternion.identity;
 		_weapon.GetComponent<SpriteRenderer>().enabled = true;
 		rigidbody = _weapon.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = 0;
-		rigidbody.AddForce(Vector3.Normalize(aimDirection) * throwingForce, ForceMode2D.Impulse);
+		forceDirection = aimingDirection + movingDirection * speed * -0.2f;
+		rigidbody.AddForce(forceDirection * throwingForce * -1, ForceMode2D.Impulse);
 		_weapon = null;
+	}
+
+	protected void		MoveTo(Vector2 target)
+	{
+		_movingTarget = target;
+		movingToTarget = true;
 	}
 }

@@ -7,13 +7,13 @@ public class Hero : Human
 	{
 		base.HandleInputs();
 
-		moveDirection = Vector2.zero;
+		movingDirection = Vector2.zero;
 
-		moveDirection.x = Input.GetAxis("Horizontal");
-		moveDirection.y = Input.GetAxis("Vertical");
-		moveDirection = Vector3.Normalize(moveDirection);
+		movingDirection.x = Input.GetAxis("Horizontal");
+		movingDirection.y = Input.GetAxis("Vertical");
+		movingDirection.Normalize();
 
-		aimDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		SetAimingTarget(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
 		if (Input.GetButtonDown("Fire1"))
 			Fire();
