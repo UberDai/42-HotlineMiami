@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
 	public float			range;
 	protected Rigidbody2D	_rigidbody;
 	protected Vector2		_basePosition;
+	public Human			shooter;
 
 	void	Awake()
 	{
@@ -33,7 +34,7 @@ public class Bullet : MonoBehaviour
 
 	void	OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject != GameManager.hero.gameObject && collision.gameObject.tag != "Bullet")
+		if (collision.gameObject != shooter.gameObject && collision.gameObject.tag != "Bullet")
 		{
 			if (collision.gameObject.tag == "Door")
 				collision.gameObject.GetComponent<Rigidbody2D>().AddForce(direction * 2f, ForceMode2D.Impulse);

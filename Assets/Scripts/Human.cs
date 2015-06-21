@@ -20,6 +20,7 @@ public class Human : MonoBehaviour
 	public float			throwingForce;
 	protected Rigidbody2D	_rigidbody;
 	protected Animator		_legsAnimator;
+	public Object			defaultWeapon;
 
 	protected Weapon		_weapon;
 
@@ -111,8 +112,14 @@ public class Human : MonoBehaviour
 	protected void		Rotate()
 	{
 		Quaternion	newRotation;
+		Vector3		to;
 
-		newRotation = Quaternion.LookRotation(transform.position - (Vector3) aimingTarget, Vector3.forward);
+		to = transform.position - (Vector3) aimingTarget;
+
+		if (to == Vector3.zero)
+			return ;
+
+		newRotation = Quaternion.LookRotation(to, Vector3.forward);
 	    newRotation.x = 0;
 	    newRotation.y = 0;
 

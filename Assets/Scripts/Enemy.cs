@@ -19,8 +19,15 @@ public class Enemy : Human
 
 	void Start()
 	{
+		GameObject	go;
+
 		hearsGunShots = false;
 		GameManager.hero.OnFire += OnPlayerShot;
+
+		go = (GameObject) Instantiate(defaultWeapon);
+		go.GetComponent<Weapon>().ammo = -1;
+
+		PickWeapon(go);
 	}
 
 	protected override void  FixedUpdate()
@@ -47,8 +54,11 @@ public class Enemy : Human
 		viewingHero = IsViewingHero();
 		heroPosition = GameManager.hero.transform.position;
 
-		if (viewingHero && Vector2.Distance(heroPosition, transform.position) < 2f)
+		if (viewingHero && Vector2.Distance(heroPosition, transform.position) < 5f)
+		{
+			Fire();
 			movingToTarget = false;
+		}
 		else
 			MoveTo(heroPosition);
 
@@ -86,6 +96,9 @@ public class Enemy : Human
 
 		heroPosition = GameManager.hero.transform.position;
 		hit = Physics2D.Raycast(transform.position, heroPosition - transform.position);
+
+		if (hit.collider == null)
+			return false;
 
 		return (hit.collider.gameObject.tag == "Hero");
 	}

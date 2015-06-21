@@ -52,6 +52,7 @@ public class Weapon : MonoBehaviour
             bullet.direction = holder.aimingDirection * -1;
             bullet.speed = bulletSpeed;
             bullet.range = range;
+            bullet.shooter = holder;
             bullet.GetComponent<SpriteRenderer>().sprite = bulletSprite;
         }
 
