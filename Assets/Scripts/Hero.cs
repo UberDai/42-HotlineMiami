@@ -15,7 +15,7 @@ public class Hero : Human
 
 		SetAimingTarget(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-		if (Input.GetButtonDown("Fire1"))
+		if (Input.GetButton("Fire1"))
 			Fire();
 
 		if (Input.GetButtonDown("Fire2"))

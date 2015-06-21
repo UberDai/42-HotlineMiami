@@ -160,6 +160,7 @@ public class Human : MonoBehaviour
 		rigidbody = _weapon.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = 0;
+		rigidbody.AddTorque(Random.Range(-2f, 2f), ForceMode2D.Impulse);
 		rigidbody.AddForce(aimingDirection * throwingForce * -1, ForceMode2D.Impulse);
 		_weapon = null;
 	}

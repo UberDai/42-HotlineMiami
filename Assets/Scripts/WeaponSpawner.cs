@@ -11,9 +11,10 @@ public class WeaponSpawner : MonoBehaviour
 		Object		prefab;
 		int			index;
 
-		index = (int) Random.Range(0, (float) (weapons.Count - 1));
+		index = (int) Random.Range(0, (float) (weapons.Count));
 		prefab = weapons[index];
 
 		Instantiate(prefab, transform.position, Quaternion.identity);
+		Destroy(gameObject);
 	}
 }

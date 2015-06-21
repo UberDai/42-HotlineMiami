@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
 
 	void	OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject != GameManager.hero.gameObject)
+		if (collision.gameObject != GameManager.hero.gameObject && collision.gameObject.tag != "Bullet")
 		{
 			if (collision.gameObject.tag == "Door")
 				collision.gameObject.GetComponent<Rigidbody2D>().AddForce(direction * 2f, ForceMode2D.Impulse);
