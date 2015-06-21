@@ -21,7 +21,7 @@ public class Enemy : Human
 	{
 		GameObject	go;
 
-		GameManager.hero.OnFire += OnPlayerShot;
+		// GameManager.hero.OnFire += OnPlayerShot;
 
 		go = (GameObject) Instantiate(defaultWeapon);
 		go.GetComponent<Weapon>().ammo = -1;
@@ -68,6 +68,9 @@ public class Enemy : Human
 
 	void FollowPredefinedPath()
 	{
+		if (predefinedPath.Length == 0)
+			return ;
+
 		MoveTo(predefinedPath[targetPoint]);
 		SetAimingTarget(predefinedPath[targetPoint]);
 

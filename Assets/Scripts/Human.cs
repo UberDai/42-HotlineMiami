@@ -23,7 +23,7 @@ public class Human : MonoBehaviour
 	protected Animator		_legsAnimator;
 	public bool				dead = false;
 
-	protected Weapon		_weapon;
+	public Weapon			weapon;
 
 	void				Awake()
 	{
@@ -97,8 +97,8 @@ public class Human : MonoBehaviour
 
 		sprites[0].sprite = headSprite;
 
-		if (_weapon != null)
-			sprites[1].sprite = _weapon.attachedSprite;
+		if (weapon != null)
+			sprites[1].sprite = weapon.attachedSprite;
 		else
 			sprites[1].sprite = null;
 
@@ -107,10 +107,10 @@ public class Human : MonoBehaviour
 
 	protected void		Fire()
 	{
-		if (_weapon == null)
+		if (weapon == null)
 			return ;
 
-		_weapon.Fire();
+		weapon.Fire();
 	}
 
 	protected void		Rotate()
@@ -153,27 +153,27 @@ public class Human : MonoBehaviour
 
 	protected void		PickWeapon(GameObject target)
 	{
-		_weapon = target.GetComponent<Weapon>();
-		_weapon.GetComponent<SpriteRenderer>().enabled = false;
-		_weapon.GetComponent<BoxCollider2D>().enabled = false;
-		_weapon.holder = this;
+		weapon = target.GetComponent<Weapon>();
+		weapon.GetComponent<SpriteRenderer>().enabled = false;
+		weapon.GetComponent<BoxCollider2D>().enabled = false;
+		weapon.holder = this;
 	}
 
 	protected void		DropWeapon()
 	{
 		Rigidbody2D	rigidbody;
 
-		_weapon.transform.position = transform.position;
-		_weapon.transform.rotation = Quaternion.identity;
-		_weapon.GetComponent<SpriteRenderer>().enabled = true;
-		_weapon.GetComponent<BoxCollider2D>().enabled = true;
-		_weapon.holder = null;
-		rigidbody = _weapon.GetComponent<Rigidbody2D>();
+		weapon.transform.position = transform.position;
+		weapon.transform.rotation = Quaternion.identity;
+		weapon.GetComponent<SpriteRenderer>().enabled = true;
+		weapon.GetComponent<BoxCollider2D>().enabled = true;
+		weapon.holder = null;
+		rigidbody = weapon.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = Vector3.zero;
 		rigidbody.angularVelocity = 0;
 		rigidbody.AddTorque(Random.Range(-2f, 2f), ForceMode2D.Impulse);
 		rigidbody.AddForce(aimingDirection * throwingForce * -1, ForceMode2D.Impulse);
-		_weapon = null;
+		weapon = null;
 	}
 
 	protected void		MoveTo(Vector2 target)
@@ -186,13 +186,24 @@ public class Human : MonoBehaviour
 	protected virtual void				Die(Bullet bullet)
 	{
 		dead = true;
+		_rigidbody.drag = 6f;
+		_rigidbody.angularDrag = 0;
 		_legsAnimator.SetBool("Walking", false);
-		_rigidbody.AddForce(bullet.direction * 2, ForceMode2D.Impulse);
+		_rigidbody.AddForce(bullet.direction * 4, ForceMode2D.Impulse);
 	}
 
 	virtual protected void	OnCollisionEnter2D(Collision2D collision)
 	{
+		Bullet	bullet;
+
 		if (collision.gameObject.tag == "Bullet")
-			Die(collision.gameObject.GetComponent<Bullet>());
+		{
+			bullet = collision.gameObject.GetComponent<Bullet>();
+
+			if (bullet.shooter != this)
+			{
+				Die(bullet);
+			}
+		}
 	}
 }

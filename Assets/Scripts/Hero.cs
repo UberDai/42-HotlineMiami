@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Hero : Human
 {
-	public delegate			void ShotEvent();
-	public event ShotEvent	OnFire;
+	// public delegate			void ShotEvent();
+	// public event ShotEvent	OnFire;
 
 	protected override void	HandleInputs()
 	{
@@ -20,16 +20,21 @@ public class Hero : Human
 
 		if (Input.GetButton("Fire1"))
 		{
-			OnFire();
+			// OnFire();
 			Fire();
 		}
 
 		if (Input.GetButtonDown("Fire2"))
 		{
-			if (_weapon != null)
+			if (weapon != null)
 				DropWeapon();
 			else
 				TryToPickWeapon();
 		}
+	}
+
+	protected override void	Die(Bullet bullet)
+	{
+		Application.LoadLevel(Application.loadedLevel);
 	}
 }

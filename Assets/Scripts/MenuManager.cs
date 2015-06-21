@@ -11,6 +11,11 @@ public class MenuManager : MonoBehaviour
 		Application.LoadLevel(Application.loadedLevel);
 	}
 
+	public void OnStartClick()
+	{
+		Application.LoadLevel("Level00");
+	}
+
 	public void OnQuitClick()
 	{
 		print("quit");
