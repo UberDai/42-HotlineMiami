@@ -38,7 +38,7 @@ public class Weapon : MonoBehaviour
         else if (_lastShot < reloadingTime)
             return ;
 
-        position = holder.transform.position;
+        position = holder.transform.position + (Vector3) holder.aimingDirection * -0.8f;
         rotation = holder.transform.rotation;
         rotation *= Quaternion.Euler(0, 0, -90);
 

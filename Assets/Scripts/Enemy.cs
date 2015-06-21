@@ -13,7 +13,7 @@ public class Enemy : Human
 
 	public Enemy.MoveState	currentState;
 	public Vector2[]		predefinedPath;
-	public bool				hearsGunShots;
+	public bool				hearsGunShots = false;
 
 	int						targetPoint = 0;
 
@@ -21,23 +21,24 @@ public class Enemy : Human
 	{
 		GameObject	go;
 
-		hearsGunShots = false;
 		GameManager.hero.OnFire += OnPlayerShot;
 
 		go = (GameObject) Instantiate(defaultWeapon);
 		go.GetComponent<Weapon>().ammo = -1;
-
 		PickWeapon(go);
 	}
 
 	protected override void  FixedUpdate()
 	{
+		if (dead)
+			return ;
+
+		base.FixedUpdate();
+
 		if (currentState == Enemy.MoveState.Walking)
 			FollowPredefinedPath();
 		else if (currentState == Enemy.MoveState.FollowingPlayer)
 			FollowPlayer();
-
-		base.FixedUpdate();
 	}
 
 	void OnPlayerShot()
@@ -54,11 +55,11 @@ public class Enemy : Human
 		viewingHero = IsViewingHero();
 		heroPosition = GameManager.hero.transform.position;
 
-		if (viewingHero && Vector2.Distance(heroPosition, transform.position) < 5f)
-		{
+		if (viewingHero)
 			Fire();
+
+		if (viewingHero && Vector2.Distance(heroPosition, transform.position) < 2f)
 			movingToTarget = false;
-		}
 		else
 			MoveTo(heroPosition);
 
@@ -92,14 +93,24 @@ public class Enemy : Human
 	bool	IsViewingHero()
 	{
 		Vector3			heroPosition;
-		RaycastHit2D	hit;
+		RaycastHit2D[]	hits;
+		LayerMask		layerMask;
+		GameObject		go;
 
+		layerMask = LayerMask.GetMask("Character", "Wall");
 		heroPosition = GameManager.hero.transform.position;
-		hit = Physics2D.Raycast(transform.position, heroPosition - transform.position);
+		hits = Physics2D.RaycastAll(transform.position, heroPosition - transform.position, Mathf.Infinity, layerMask.value);
 
-		if (hit.collider == null)
-			return false;
+		foreach (RaycastHit2D hit in hits)
+		{
+			go = hit.collider.gameObject;
 
-		return (hit.collider.gameObject.tag == "Hero");
+			if (go == this)
+				continue;
+			else if (go.layer == 10)
+				return false;
+		}
+
+		return (true);
 	}
 }

@@ -12,6 +12,7 @@ public class Human : MonoBehaviour
 	public Vector2			aimingTarget;
 	[HideInInspector]
 	public Vector2			aimingDirection;
+	public Object			defaultWeapon;
 	public int				maxLife;
 	public float			speed;
 	public float			rotationSpeed;
@@ -20,7 +21,7 @@ public class Human : MonoBehaviour
 	public float			throwingForce;
 	protected Rigidbody2D	_rigidbody;
 	protected Animator		_legsAnimator;
-	public Object			defaultWeapon;
+	public bool				dead = false;
 
 	protected Weapon		_weapon;
 
@@ -38,6 +39,9 @@ public class Human : MonoBehaviour
 
 	protected virtual void		FixedUpdate()
 	{
+		if (dead)
+			return ;
+
 		_rigidbody.velocity = Vector3.zero;
 		_rigidbody.angularVelocity = 0;
 
@@ -176,5 +180,18 @@ public class Human : MonoBehaviour
 	{
 		_movingTarget = target;
 		movingToTarget = true;
+	}
+
+	void				Die(Bullet bullet)
+	{
+		dead = true;
+		_legsAnimator.SetBool("Walking", false);
+		_rigidbody.AddForce(bullet.direction, ForceMode2D.Impulse);
+	}
+
+	virtual protected void	OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Bullet")
+			Die(collision.gameObject.GetComponent<Bullet>());
 	}
 }
