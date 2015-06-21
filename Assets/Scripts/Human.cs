@@ -179,14 +179,15 @@ public class Human : MonoBehaviour
 	protected void		MoveTo(Vector2 target)
 	{
 		_movingTarget = target;
+		_rigidbody.fixedAngle = true;
 		movingToTarget = true;
 	}
 
-	void				Die(Bullet bullet)
+	protected virtual void				Die(Bullet bullet)
 	{
 		dead = true;
 		_legsAnimator.SetBool("Walking", false);
-		_rigidbody.AddForce(bullet.direction, ForceMode2D.Impulse);
+		_rigidbody.AddForce(bullet.direction * 2, ForceMode2D.Impulse);
 	}
 
 	virtual protected void	OnCollisionEnter2D(Collision2D collision)

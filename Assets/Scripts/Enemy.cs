@@ -113,4 +113,10 @@ public class Enemy : Human
 
 		return (true);
 	}
+
+	protected override void	Die(Bullet bullet)
+	{
+		base.Die(bullet);
+		Destroy(gameObject, 2f);
+	}
 }
